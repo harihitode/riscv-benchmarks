@@ -7,6 +7,8 @@
 #include <stdint.h>
 #include <math.h>
 
+#pragma STDC FP_CONTRACT ON
+
 #ifdef SP
 typedef float t;
 #define fma fmaf

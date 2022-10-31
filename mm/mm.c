@@ -10,10 +10,7 @@
 
 float fmaf(float a, float b, float c) {
   float f;
-  asm volatile("fmadd.s %0, %1, %2, %3"
-               : "=f"(f)
-               : "f"(a), "f"(b), "f"(c)
-               );
+  f = a * b + c;
   return f;
 }
 
