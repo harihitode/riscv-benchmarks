@@ -4,7 +4,7 @@
 # Yunsup Lee (yunsup@cs.berkeley.edu)
 #
 
-XLEN ?= 64
+XLEN ?= 32
 
 default: all
 
@@ -53,19 +53,19 @@ bmarks_host = \
 HOST_OPTS = -std=gnu99 -DPREALLOCATE=0 -DHOST_DEBUG=1
 HOST_COMP = gcc $(HOST_OPTS)
 
-RISCV_PREFIX ?= riscv$(XLEN)-unknown-elf-
-RISCV_GCC ?= $(RISCV_PREFIX)gcc
-RISCV_GCC_OPTS ?= -mcmodel=medany -static -std=gnu99 -O2 -ffast-math -fno-common -fno-builtin-printf  -march=RV64IMAFDXhwacha
-RISCV_LINK ?= $(RISCV_GCC) -T $(src_dir)/common/test.ld $(incs)
+RISCV_PREFIX ?= ~/llvm-riscv-15/bin/
+RISCV_GCC ?= $(RISCV_PREFIX)clang
+RISCV_GCC_OPTS ?= -mcmodel=medany -static -std=gnu99 -O2 -ffast-math -fno-common -fno-builtin-printf -nodefaultlibs -g --target=riscv32 -march=rv32imafc -mabi=ilp32 -DSP
+RISCV_LINK ?= $(RISCV_PREFIX)clang -v
 RISCV_LINK_MT ?= $(RISCV_GCC) -T $(src_dir)/common/test-mt.ld
-RISCV_LINK_OPTS ?= -nostdlib -nostartfiles -ffast-math -lgcc -Wl,-v
-RISCV_OBJDUMP ?= $(RISCV_PREFIX)objdump --disassemble-all --disassemble-zeroes --section=.text --section=.text.startup --section=.data
+RISCV_LINK_OPTS ?= -nostdlib -lclang_rt.builtins -T $(src_dir)/common/test.ld -L$(HOME)/llvm-riscv-15/lib/clang/15.0.3/lib/riscv32-unknown-elf/ --target=riscv32 -march=rv32imafc -mabi=ilp32
+RISCV_OBJDUMP ?= $(RISCV_PREFIX)llvm-objdump --disassemble-all --disassemble-zeroes --section=.text --section=.text.startup --section=.data
 RISCV_SIM ?= spike
 
 VPATH += $(addprefix $(src_dir)/, $(bmarks))
 VPATH += $(src_dir)/common
 
-incs  +=  -I$(src_dir)/riscv-pk/machine -I$(src_dir)/libamf/src -I$(src_dir)/common $(addprefix -I$(src_dir)/, $(bmarks))
+incs  +=  -I$(src_dir)/riscv-pk/machine -I$(src_dir)/libamf/src -I$(src_dir)/common $(addprefix -I$(src_dir)/, $(bmarks)) -I$(HOME)/newlib-cygwin/newlib/libc/include
 objs  :=
 
 include $(patsubst %, $(src_dir)/%/bmark.mk, $(bmarks))
