@@ -55,10 +55,10 @@ HOST_COMP = gcc $(HOST_OPTS)
 
 RISCV_PREFIX ?= ~/llvm-riscv-15/bin/
 RISCV_GCC ?= $(RISCV_PREFIX)clang
-RISCV_GCC_OPTS ?= -mcmodel=medany -static -std=gnu99 -O2 -ffast-math -fno-common -fno-builtin-printf -nodefaultlibs -g --target=riscv32 -march=rv32imafc -mabi=ilp32 -DSP
+RISCV_GCC_OPTS ?= -mcmodel=medany -static -std=gnu99 -O2 -ffast-math -fno-common -fno-builtin-printf -nodefaultlibs -g --target=riscv32 -march=rv32imac -mabi=ilp32 -DSP
 RISCV_LINK ?= $(RISCV_PREFIX)clang -v
 RISCV_LINK_MT ?= $(RISCV_GCC) -T $(src_dir)/common/test-mt.ld
-RISCV_LINK_OPTS ?= -nostdlib -lclang_rt.builtins -T $(src_dir)/common/test.ld -L$(HOME)/llvm-riscv-15/lib/clang/15.0.3/lib/riscv32-unknown-elf/ --target=riscv32 -march=rv32imafc -mabi=ilp32
+RISCV_LINK_OPTS ?= -nostdlib -lclang_rt.builtins -T $(src_dir)/common/test.ld -L$(HOME)/llvm-riscv-15/lib/clang/15.0.3/lib/riscv32-unknown-elf/ --target=riscv32 -march=rv32imac -mabi=ilp32
 RISCV_OBJDUMP ?= $(RISCV_PREFIX)llvm-objdump --disassemble-all --disassemble-zeroes --section=.text --section=.text.startup --section=.data
 RISCV_SIM ?= spike
 
